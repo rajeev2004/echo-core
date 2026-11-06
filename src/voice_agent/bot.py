@@ -3,12 +3,12 @@
 from loguru import logger
 from pipecat.frames.frames import InputAudioRawFrame, OutputAudioRawFrame
 from pipecat.pipeline.pipeline import Pipeline
-from pipecat.pipeline.runner import PipelineRunner
-from pipecat.pipeline.task import PipelineTask
+from pipecat.pipeline.worker import PipelineWorker
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import create_transport
 from pipecat.transports.base_transport import TransportParams
+from pipecat.workers.runner import WorkerRunner
 
 # One entry per transport; Twilio will be added later.
 TRANSPORT_PARAMS = {
@@ -30,7 +30,7 @@ async def bot(runner_args: RunnerArguments):
     transport = await create_transport(runner_args, TRANSPORT_PARAMS)
 
     pipeline = Pipeline([transport.input(), EchoProcessor(), transport.output()])
-    task = PipelineTask(pipeline)
+    worker = PipelineWorker(pipeline)
 
     @transport.event_handler("on_client_connected")
     async def on_connected(transport, client):
@@ -39,9 +39,11 @@ async def bot(runner_args: RunnerArguments):
     @transport.event_handler("on_client_disconnected")
     async def on_disconnected(transport, client):
         logger.info("client disconnected")
-        await task.cancel()
+        await worker.cancel()
 
-    await PipelineRunner(handle_sigint=runner_args.handle_sigint).run(task)
+    runner = WorkerRunner(handle_sigint=runner_args.handle_sigint)
+    await runner.add_workers(worker)
+    await runner.run()
 
 
 if __name__ == "__main__":
