@@ -1,0 +1,22 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Call artifacts (may contain PII)
+logs/
+recordings/
+transcripts/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
