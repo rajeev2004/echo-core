@@ -3,7 +3,10 @@ name = "voice-agent"
 version = "0.1.0"
 description = "Production voice calling agent on Pipecat"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["pipecat-ai[webrtc,runner,silero]>=1.15,<2"]
+
+[project.optional-dependencies]
+dev = ["black", "ruff", "pytest", "pytest-asyncio"]
 
 [tool.black]
 line-length = 100

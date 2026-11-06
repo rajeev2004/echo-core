@@ -165,5 +165,12 @@ jurisdiction are defined — this is still open and varies by use case.
   dependencies added to `pyproject.toml` or `requirements.txt`, virtualenv
   creation, Docker images, and CLIs like ngrok. State what you want to
   install and why, then wait for an explicit yes.
+- **Explain every change, for a learner.** The user is learning as we
+  build and is not yet familiar with agents, Pipecat, or the tools and
+  libraries involved. After each change, say plainly what was done, why
+  it was done, and what need it solves. Explain every import, library,
+  tool, and term the first time it appears, in everyday language, with a
+  small analogy where it helps. Stay to the point: elaborate on the
+  unfamiliar, skip the obvious. One command or edit at a time.
 - If something here conflicts with what's asked mid-session, flag the
   conflict rather than silently following whichever is newer.
